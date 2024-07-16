@@ -11,7 +11,7 @@ IS_VERBOSE = False
 IS_STREAM = False
 IS_SAVE = False
 
-MODEL_PATH = 'models/yolov8n-pose.pt' # PATH SERING TROUBLE, GUNAKAN FULL PATH
+MODEL_PATH = '../models/yolov8n-pose.pt' # PATH SERING TROUBLE, GUNAKAN FULL PATH
 
 class Detector:
     def __init__(self):

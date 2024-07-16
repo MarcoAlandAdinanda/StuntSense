@@ -24,8 +24,6 @@ class StuntSenseApp(tk.Tk):
         self.file_name = "foto"+str(self.file_counter)+".png"
 
         self.title('Stuntsense GUI')
-        self.style = ttk.Style(self)
-        self.style.theme_use('clam')
         
         ## Main frame ##
         self.main_frame = ttk.Frame(self)
@@ -49,31 +47,31 @@ class StuntSenseApp(tk.Tk):
         self.right_frame.pack(side=tk.RIGHT, fill=tk.BOTH, expand=True)
 
         # Input mode
-        self.mode_input = ttk.Entry(self.left_frame)
+        self.mode_input = ttk.Entry(self.right_frame)
         self.mode_input.insert(0, "Input Mode")
         self.mode_input.pack(pady=5)
 
         # Input name
-        self.name_input = ttk.Entry(self.left_frame)
+        self.name_input = ttk.Entry(self.right_frame)
         self.name_input.insert(0, "Input Name")
         self.name_input.pack(pady=5)
 
         # Input gender
-        self.gender_input = ttk.Entry(self.left_frame)
+        self.gender_input = ttk.Entry(self.right_frame)
         self.gender_input.insert(0, "Input Gender")
         self.gender_input.pack(pady=5)
 
         # Input age
-        self.age_input = ttk.Entry(self.left_frame)
+        self.age_input = ttk.Entry(self.right_frame)
         self.age_input.insert(0, "Input Age")
         self.age_input.pack(pady=5)
 
         # Take pic
-        self.capture_button = ttk.Button(self.left_frame, text='Take Picture', command=self.take_picture)
+        self.capture_button = ttk.Button(self.right_frame, text='Take Picture', command=self.take_picture)
         self.capture_button.pack(pady=5)
 
         # Start process
-        self.start_button = ttk.Button(self.left_frame, text='Start Process', command=self.start_process)
+        self.start_button = ttk.Button(self.right_frame, text='Start Process', command=self.start_process)
         self.start_button.pack(pady=5)
 
         # Terminal output

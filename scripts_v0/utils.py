@@ -1,4 +1,3 @@
-import os
 import cv2
 
 def pixel_per_metric(cam_dist): # nonsense results
@@ -35,18 +34,3 @@ def midpoint(point1, point2):
         mid_x = (x_1 + x_2) / 2
         mid_y = (y_1 + y_2) / 2
         return [int(mid_x), int(mid_y)]
-
-def count_files_in_directory(directory):
-    try:
-        # Get the list of all files and directories in the specified directory
-        files_and_dirs = os.listdir(directory)
-        
-        # Filter out only the files
-        files = [f for f in files_and_dirs if os.path.isfile(os.path.join(directory, f))]
-        
-        # Return the count of files
-        return len(files)
-    
-    except Exception as e:
-        print(f"An error occurred: {e}")
-        return 0
