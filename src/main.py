@@ -12,6 +12,7 @@ from utils import *
 from detector import Detector
 import serial_communication as com
 from tkinter import filedialog
+import pandas as pd
 
 class StuntSense(ctk.CTk):
     def __init__(self, title, size):
@@ -30,7 +31,7 @@ class StuntSense(ctk.CTk):
         ctk.set_appearance_mode("dark")
     
         # path
-        resources = 'resources/'
+        resources = 'resources/images/'
         results = 'results/'
         
 		# webcam
@@ -194,6 +195,16 @@ class Options(ctk.CTkFrame):
             self.cam_roll = float(serial_msg[1].strip())
             self.cam_pitch = float(serial_msg[2].strip())
 
+            # dummy sensor
+            # self.cam_dist = 12
+            # self.cam_roll = -8.2
+            # self.cam_pitch = -4.0
+
+            print('resources/sensor_data/' + self.filename)
+
+            # save sensor data
+            write_to_csv(self.filename, self.cam_dist, self.cam_roll, self.cam_pitch)
+
             # display sensor outputs
             self.output_text.insert(tk.END, str("Distance: "))
             self.output_text.insert(tk.END, str(self.cam_dist) + "\n")
@@ -204,9 +215,10 @@ class Options(ctk.CTkFrame):
             self.output_text.config(state='disabled')
 
     def select_img(self):
-        used_pic_path = filedialog.askopenfilename(filetypes=[("Image files", "*.jpg *.jpeg *.png *.bmp *.gif")])
-        if used_pic_path:
-            used_pic = Image.open(used_pic_path)
+        self.used_pic_path = filedialog.askopenfilename(filetypes=[("Image files", "*.jpg *.jpeg *.png *.bmp *.gif")])
+   
+        if self.used_pic_path:
+            used_pic = Image.open(self.used_pic_path)
             self.selected_pic = np.array(used_pic)
             
             used_pic = used_pic.resize((self.output_image.winfo_width(), self.output_image.winfo_height()))
@@ -214,6 +226,22 @@ class Options(ctk.CTkFrame):
             self.output_image.imgtk = imgtk
             self.output_image.create_image(0, 0, anchor='nw', image=imgtk)
 
+            # load sensor data
+            # try:
+            sensor_data = pd.read_csv('resources/sensor_data/sensor_data.csv')
+            data = sensor_data.loc[(sensor_data.img_name == self.used_pic_path.split('/')[-1]), ['cam_dist', 'cam_roll', 'cam_pitch']].values[0]
+            self.cam_dist, self.cam_roll, self.cam_pitch = data[0], data[1], data[2]
+
+            self.output_text.config(state='normal')
+            self.output_text.insert(tk.END, str("Distance: "))
+            self.output_text.insert(tk.END, str(self.cam_dist) + "\n")
+            self.output_text.insert(tk.END, str("Roll Angle: "))
+            self.output_text.insert(tk.END, str(self.cam_roll) + "\n")
+            self.output_text.insert(tk.END, str("Pitch Angle: "))
+            self.output_text.insert(tk.END, str(self.cam_pitch) + "\n")
+            self.output_text.config(state='disabled')
+            # except:
+            #     pass
 
     def start_process(self):
         """
@@ -221,11 +249,7 @@ class Options(ctk.CTkFrame):
         """
         # try:
         self.output_text.config(state='normal')
-
-        # self.cam_dist = 228
-        # self.cam_roll = -72.2
-        # self.cam_pitch = -4.0
-
+    
         # Get Input Data
         mode = string.capwords(self.mode.get())
         name = string.capwords(self.name.get())

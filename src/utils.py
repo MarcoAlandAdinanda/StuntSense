@@ -1,5 +1,6 @@
 import os
 import cv2
+import csv
 
 def pixel_per_metric(cam_dist): # nonsense results
     ppm = ((0.0944*(cam_dist**2)) - (5.5989*cam_dist) + 105.16)
@@ -51,3 +52,36 @@ def count_files_in_directory(directory):
     except Exception as e:
         print(f"An error occurred: {e}")
         return 0
+    
+def write_to_csv(img_name, cam_dist, cam_roll, cam_pitch):
+    # Check if file exists
+    csv_path = 'resources/sensor_data/sensor_data.csv'
+    file_exists = os.path.isfile(csv_path)
+    
+    # Write to CSV
+    with open(csv_path, mode='a', newline='') as file:
+        writer = csv.writer(file)
+        
+        # Write header only if file does not exist
+        if not file_exists:
+            writer.writerow(["img_name", "cam_dist", "cam_roll", "cam_pitch"])
+        
+        # Write data
+        writer.writerow([img_name, cam_dist, cam_roll, cam_pitch])
+
+def load_from_csv(file_path):
+    data = []
+    
+    # Read from CSV
+    with open(file_path, mode='r') as file:
+        reader = csv.reader(file)
+        # Skip header
+        next(reader)
+        # Read data
+        for row in reader:
+            name = row[0]
+            age = int(row[1])
+            city = row[2]
+            data.append((name, age, city))
+    
+    return data
